@@ -86,88 +86,142 @@ $button-variants: (
 // scss-docs-end btn-variants
 
 
-// Helper function to get nested map values using dot notation
-@function get-nested-value($map, $keys) {
-  $value: $map;
-  @each $key in $keys {
-    @if type-of($value) == "map" {
-      $value: map-get($value, $key);
-    } @else {
-      @return null;
-    }
-  }
-  @return $value;
-}
+// // Helper function to get nested map values using dot notation
+// @function get-nested-value($map, $keys) {
+//   $value: $map;
+//   @each $key in $keys {
+//     @if type-of($value) == "map" {
+//       $value: map-get($value, $key);
+//     } @else {
+//       @return null;
+//     }
+//   }
+//   @return $value;
+// }
 
-// Helper function to split dot notation string into list
-@function split-keys($key) {
-  $keys: ();
-  $parts: str-slice($key, 1);
-  @each $part in $parts {
-    $keys: append($keys, $part);
-  }
-  @return $keys;
-}
+// // Helper function to split dot notation string into list
+// @function split-keys($key) {
+//   $keys: ();
+//   $parts: str-slice($key, 1);
+//   @each $part in $parts {
+//     $keys: append($keys, $part);
+//   }
+//   @return $keys;
+// }
 
-// Main button style generator mixin
-// scss-docs-start btn-variant-mixin
-@mixin button-variant($color, $variant) {
-  $variant-styles: map.get($button-variants, $variant);
+// // Main button style generator mixin
+// // scss-docs-start btn-variant-mixin
+// @mixin button-variant($color, $variant) {
+//   $variant-styles: map.get($button-variants, $variant);
 
-  @if $variant-styles {
+//   @if $variant-styles {
+//     // Base properties
+//     @each $property, $value in map.get($variant-styles, "base") {
+//       @if $value == "transparent" {
+//         --#{$prefix}btn-#{$property}: transparent;
+//       } @else {
+//         --#{$prefix}btn-#{$property}: var(--#{$prefix}#{$color}-#{$value});
+//       }
+//     }
+
+//     // Hover state
+//     &:hover {
+//       @each $property, $value in map.get($variant-styles, "hover") {
+//         @if $value == "transparent" {
+//           --#{$prefix}btn-hover-#{$property}: transparent;
+//         } @else if meta.type-of($value) == "list" {
+//           $first-value: list.nth($value, 1);
+//           $second-value: list.nth($value, 2);
+//           --#{$prefix}btn-hover-#{$property}: color-mix(in oklch, var(--#{$prefix}#{$color}-#{$first-value}) 50%, var(--#{$prefix}#{$color}-#{$second-value}));
+//         } @else if $value == "bg-subtle" {
+//           --#{$prefix}btn-hover-#{$property}: var(--#{$prefix}#{$color}-#{$value});
+//         } @else {
+//           --#{$prefix}btn-hover-#{$property}: oklch(from var(--#{$prefix}#{$color}-#{$value}) calc(l * .95) calc(c * 1.1) h);
+//         }
+//       }
+//     }
+
+//     &:focus-visible {
+//       outline-color: var(--#{$prefix}#{$color}-focus-ring);
+//     }
+
+//     // Active state
+//     &:active,
+//     &.active {
+//       @each $property, $value in map.get($variant-styles, "active") {
+//         @if $value == "transparent" {
+//           --#{$prefix}btn-active-#{$property}: transparent;
+//         } @else if $value == "bg-subtle" {
+//           --#{$prefix}btn-active-#{$property}: var(--#{$prefix}#{$color}-#{$value});
+//         } @else {
+//           --#{$prefix}btn-active-#{$property}: oklch(from var(--#{$prefix}#{$color}-#{$value}) calc(l * .9) calc(c * 1.15) h);
+//         }
+//       }
+//     }
+//   }
+// }
+// // scss-docs-end btn-variant-mixin
+
+// Generate button variant classes (e.g., .btn-solid, .btn-outline, etc.)
+@each $variant, $_ in $button-variants {
+  .btn-#{$variant} {
     // Base properties
-    @each $property, $value in map.get($variant-styles, "base") {
+    @each $property, $value in map.get($button-variants, $variant, "base") {
       @if $value == "transparent" {
         --#{$prefix}btn-#{$property}: transparent;
       } @else {
-        --#{$prefix}btn-#{$property}: var(--#{$prefix}#{$color}-#{$value});
+        --#{$prefix}btn-#{$property}: var(--#{$prefix}theme-#{$value});
       }
     }
 
     // Hover state
     &:hover {
-      @each $property, $value in map.get($variant-styles, "hover") {
+      @each $property, $value in map.get($button-variants, $variant, "hover") {
         @if $value == "transparent" {
           --#{$prefix}btn-hover-#{$property}: transparent;
         } @else if meta.type-of($value) == "list" {
           $first-value: list.nth($value, 1);
           $second-value: list.nth($value, 2);
-          --#{$prefix}btn-hover-#{$property}: color-mix(in oklch, var(--#{$prefix}#{$color}-#{$first-value}) 50%, var(--#{$prefix}#{$color}-#{$second-value}));
+          --#{$prefix}btn-hover-#{$property}: color-mix(in oklch, var(--#{$prefix}theme-#{$first-value}) 50%, var(--#{$prefix}theme-#{$second-value}));
         } @else if $value == "bg-subtle" {
-          --#{$prefix}btn-hover-#{$property}: var(--#{$prefix}#{$color}-#{$value});
+          --#{$prefix}btn-hover-#{$property}: var(--#{$prefix}theme-#{$value});
         } @else {
-          --#{$prefix}btn-hover-#{$property}: oklch(from var(--#{$prefix}#{$color}-#{$value}) calc(l * .95) calc(c * 1.1) h);
+          --#{$prefix}btn-hover-#{$property}: oklch(from var(--#{$prefix}theme-#{$value}) calc(l * .95) calc(c * 1.1) h);
         }
       }
     }
 
     &:focus-visible {
-      outline-color: var(--#{$prefix}#{$color}-focus-ring);
+      outline-color: var(--#{$prefix}theme-focus-ring);
     }
 
     // Active state
     &:active,
     &.active {
-      @each $property, $value in map.get($variant-styles, "active") {
+      @each $property, $value in map.get($button-variants, $variant, "active") {
         @if $value == "transparent" {
           --#{$prefix}btn-active-#{$property}: transparent;
         } @else if $value == "bg-subtle" {
-          --#{$prefix}btn-active-#{$property}: var(--#{$prefix}#{$color}-#{$value});
+          --#{$prefix}btn-active-#{$property}: var(--#{$prefix}theme-#{$value});
         } @else {
-          --#{$prefix}btn-active-#{$property}: oklch(from var(--#{$prefix}#{$color}-#{$value}) calc(l * .9) calc(c * 1.15) h);
+          --#{$prefix}btn-active-#{$property}: oklch(from var(--#{$prefix}theme-#{$value}) calc(l * .9) calc(c * 1.15) h);
         }
       }
     }
   }
 }
-// scss-docs-end btn-variant-mixin
 
-// Generate all button variants
+// Generate theme modifier classes (e.g., .theme-primary, .theme-accent, etc.)
 @each $color, $_ in $new-theme-colors {
-  @each $variant, $_ in $button-variants {
-    .btn-#{$color}-#{$variant} {
-      @include button-variant($color, $variant);
-    }
+  .theme-#{$color} {
+    --#{$prefix}theme-base: var(--#{$prefix}#{$color}-base);
+    --#{$prefix}theme-text: var(--#{$prefix}#{$color}-text);
+    --#{$prefix}theme-bg: var(--#{$prefix}#{$color}-bg);
+    --#{$prefix}theme-bg-subtle: var(--#{$prefix}#{$color}-bg-subtle);
+    --#{$prefix}theme-bg-muted: var(--#{$prefix}#{$color}-bg-muted);
+    --#{$prefix}theme-border: var(--#{$prefix}#{$color}-border);
+    --#{$prefix}theme-focus-ring: var(--#{$prefix}#{$color}-focus-ring);
+    --#{$prefix}theme-contrast: var(--#{$prefix}#{$color}-contrast);
   }
 }
 
