@@ -216,6 +216,7 @@ $button-variants: (
   .theme-#{$color} {
     --#{$prefix}theme-base: var(--#{$prefix}#{$color}-base);
     --#{$prefix}theme-text: var(--#{$prefix}#{$color}-text);
+    --#{$prefix}theme-text-emphasis: var(--#{$prefix}#{$color}-text-emphasis);
     --#{$prefix}theme-bg: var(--#{$prefix}#{$color}-bg);
     --#{$prefix}theme-bg-subtle: var(--#{$prefix}#{$color}-bg-subtle);
     --#{$prefix}theme-bg-muted: var(--#{$prefix}#{$color}-bg-muted);
