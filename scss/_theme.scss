@@ -15,6 +15,17 @@
   @return $result;
 }
 
+// Generate theme classes dynamically based on the keys in each theme color map
+@mixin generate-theme-classes() {
+  @each $color-name, $color-map in $new-theme-colors {
+    .theme-#{$color-name} {
+      @each $key, $value in $color-map {
+        --#{$prefix}theme-#{$key}: var(--#{$prefix}#{$color-name}-#{$key});
+      }
+    }
+  }
+}
+
 // Recursive mixin to handle nested maps
 @mixin create-css-vars($map, $parent-key: "") {
   @each $key, $value in $map {
@@ -120,6 +131,9 @@ $new-theme-colors: (
   )
 ) !default;
 // scss-docs-end theme-colors
+
+// Generate theme modifier classes (e.g., .theme-primary, .theme-accent, etc.)
+@include generate-theme-classes();
 
 // mdo-do: consider using muted, subtle, ghost or something instead of linear scale?
 $theme-bgs: (

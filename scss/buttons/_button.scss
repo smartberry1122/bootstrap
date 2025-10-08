@@ -6,7 +6,6 @@
 @use "../config" as *;
 @use "../theme" as *;
 @use "../variables" as *;
-@use "../theme" as *;
 @use "../functions" as *;
 @use "../vendor/rfs" as *;
 @use "../mixins/border-radius" as *;
@@ -211,21 +210,6 @@ $button-variants: (
   }
 }
 
-// Generate theme modifier classes (e.g., .theme-primary, .theme-accent, etc.)
-@each $color, $_ in $new-theme-colors {
-  .theme-#{$color} {
-    --#{$prefix}theme-base: var(--#{$prefix}#{$color}-base);
-    --#{$prefix}theme-text: var(--#{$prefix}#{$color}-text);
-    --#{$prefix}theme-text-emphasis: var(--#{$prefix}#{$color}-text-emphasis);
-    --#{$prefix}theme-bg: var(--#{$prefix}#{$color}-bg);
-    --#{$prefix}theme-bg-subtle: var(--#{$prefix}#{$color}-bg-subtle);
-    --#{$prefix}theme-bg-muted: var(--#{$prefix}#{$color}-bg-muted);
-    --#{$prefix}theme-border: var(--#{$prefix}#{$color}-border);
-    --#{$prefix}theme-focus-ring: var(--#{$prefix}#{$color}-focus-ring);
-    --#{$prefix}theme-contrast: var(--#{$prefix}#{$color}-contrast);
-  }
-}
-
 // scss-docs-start btn-size-mixin
 @mixin button-size($padding-y, $padding-x, $font-size, $border-radius) {
   --#{$prefix}btn-padding-y: #{$padding-y};
@@ -234,7 +218,6 @@ $button-variants: (
   --#{$prefix}btn-border-radius: #{$border-radius};
 }
 // scss-docs-end btn-size-mixin
-
 
 //
 // Base styles
