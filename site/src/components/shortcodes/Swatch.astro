@@ -5,11 +5,10 @@ export interface Props {
   size?: 'inline' | 'medium' | 'large'
   contrast?: string
   contrastDark?: string
-  cssVar?: string
   showVar?: boolean
 }
 
-const { bg, fg, size = 'inline', contrast, contrastDark, cssVar, showVar = true } = Astro.props
+const { bg, fg, size = 'inline', contrast, contrastDark, showVar = true } = Astro.props
 
 // Styles for different sizes
 const baseStyles = {
@@ -55,8 +54,8 @@ const contrastStyles = {
 
 const combinedStyles = { ...baseStyles, ...sizeStyles[size] }
 
-// Determine which CSS variable to display
-const displayCssVar = cssVar || bg
+// Use bg prop as the CSS variable name
+const displayCssVar = bg
 ---
 
 <style>
@@ -81,8 +80,6 @@ const displayCssVar = cssVar || bg
   /* CSS variable display styles */
   .css-var {
     margin-left: 0.25rem;
-    font-family: var(--bs-font-monospace);
-    font-size: 0.875rem;
     color: var(--bs-color-3);
   }
 
@@ -112,10 +109,10 @@ const displayCssVar = cssVar || bg
       {contrastDark && <span style={{...contrastStyles, color: isLowContrastDark ? 'red' : 'inherit'}} class="contrast-dark">{contrastDark}</span>}
     </span>
     {showVar && displayCssVar && (
-      <span class="css-var" data-css-var={`--bs-${displayCssVar}`}>
+      <code class="css-var" data-css-var={`--bs-${displayCssVar}`}>
         <span class="css-var-light">Loading...</span>
         <span class="css-var-dark">Loading...</span>
-      </span>
+      </code>
     )}
   </>
 ) : size === 'large' ? (
